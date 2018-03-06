@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youliang.dao.BlogDao">
+    <resultMap id="result_map" type="com.youliang.entity.Blog">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <id column="title" property="title" jdbcType="VARCHAR"/>
+        <id column="content" property="content" jdbcType="VARCHAR"/>
+        <id column="author_id" property="authorId" jdbcType="INTEGER"/>
+        <id column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+        <id column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="column_list">
+        id, title, content, author_id, update_date, create_date
+    </sql>
+
+    <select id="getBlogById" parameterType="java.lang.Integer" resultMap="result_map">
+        select
+        <include refid="column_list"/>
+        from cyl_blog
+        where id = #{id, jdbcType=INTEGER}
+    </select>
+    
+    <select id="getBlogsByAuthorId" parameterType="java.lang.Integer" resultMap="result_map">
+        select
+        <include refid="column_list"/>
+        from cyl_blog
+        where author_id = #{authorId, jdbcType=INTEGER}
+    </select>
+    
+    <select id="getBlogsByTitle" parameterType="java.lang.String" resultMap="result_map">
+        select
+        <include refid="column_list"/>
+        from cyl_blog
+        where title CONCAT('%', #{title, jdbcType=VARCHAR}, '%')
+    </select>
+
+    <insert id="insertBlog" parameterType="com.youliang.entity.Blog">
+        INSERT INTO cyl_blog(title, content, author_id, update_date, create_date)
+        VALUES (
+        #{title, jdbcType = VARCHAR},
+        #{content, jdbcType = VARCHAR},
+        #{authorId, jdbcType = INTEGER},
+        now(),
+        now()
+        )
+    </insert>
+
+</mapper>        

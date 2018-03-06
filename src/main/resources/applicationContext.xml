@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd ">
+
+    <context:component-scan base-package="com.youliang.service"/>
+    <context:component-scan base-package="com.youliang.dao"/>
+
+    <!-- 配置数据源 -->
+<!--    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+    </bean>-->
+
+    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource"
+          destroy-method="close">
+        <!-- 数据库驱动 -->
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <!-- 相应驱动的jdbcUrl,你懂的 -->
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/db_blog?useUnicode=true&amp;characterEncoding=utf8" />
+        <!-- 数据库的用户名 -->
+        <property name="username" value="root" />
+        <!-- 数据库的密码 -->
+        <property name="password" value="root" />
+<!--        &lt;!&ndash; 检查数据库连接池中空闲连接的间隔时间，单位是分，默认值：240，如果要取消则设置为0 &ndash;&gt;
+        <property name="idleConnectionTestPeriod" value="${aliLibrary.db.idleConnectionTestPeriod}" />
+        &lt;!&ndash; 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 &ndash;&gt;
+        <property name="idleMaxAge" value="${aliLibrary.db.idleMaxAge}" />
+        &lt;!&ndash; 每个分区最大的连接数 &ndash;&gt;
+        <property name="maxConnectionsPerPartition" value="${aliLibrary.db.maxConnectionsPerPartition}" />
+        &lt;!&ndash; 每个分区最小的连接数 &ndash;&gt;
+        <property name="minConnectionsPerPartition" value="${aliLibrary.db.minConnectionsPerPartition}" />
+        &lt;!&ndash; 分区数 ，默认值2，最小1，推荐3-4，视应用而定&ndash;&gt;
+        <property name="partitionCount" value="${aliLibrary.db.partitionCount}" />
+        &lt;!&ndash; 每次去拿数据库连接的时候一次性要拿几个,默认值：2 &ndash;&gt;
+        <property name="acquireIncrement" value="${aliLibrary.db.acquireIncrement}" />
+        &lt;!&ndash; 缓存prepared statements的大小，默认值：0 &ndash;&gt;
+        <property name="statementsCacheSize" value="${aliLibrary.db.statementsCacheSize}" />
+        &lt;!&ndash; 每个分区释放链接助理进程的数量，默认值：3，除非你的一个数据库连接的时间内做了很多工作，不然过多的助理进程会影响你的性能 &ndash;&gt;
+        <property name="releaseHelperThreads" value="${aliLibrary.db.releaseHelperThreads}" />-->
+    </bean>
+
+    <!-- 配置mybatis的sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <!-- 自动扫描mappers.xml文件 -->
+        <property name="mapperLocations" value="classpath:mappers/*.xml"></property>
+        <!-- mybatis配置文件 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+    </bean>
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.youliang.dao." />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- 配置事务通知属性 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 定义事务传播属性 -->
+        <tx:attributes>
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="edit*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="new*" propagation="REQUIRED" />
+            <tx:method name="set*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="change*" propagation="REQUIRED" />
+            <tx:method name="check*" propagation="REQUIRED" />
+            <tx:method name="get*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="find*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="load*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+
+    <!-- 配置事务切面 -->
+    <aop:config>
+        <aop:pointcut id="serviceOperation"
+                      expression="execution(* com.youliang.service.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation" />
+    </aop:config>
+</beans>
