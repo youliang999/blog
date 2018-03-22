@@ -54,4 +54,5 @@
         <property name="prefix" value="/pages/"/><!--设置JSP文件的目录位置-->
         <property name="suffix" value=".jsp"/>
     </bean>
+
 </beans>

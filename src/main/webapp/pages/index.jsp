@@ -26,12 +26,26 @@
             return true;
         }
     </script>
+    <style type="text/css">
+        .loginbody {
+            background: #fbfbfb;
+            min-width: 0;
+        }
+        .loginform {
+            font-weight: normal;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            -webkit-box-shadow: rgba(200,200,200,0.7) 0 4px 10px -1px;
+            box-shadow: rgba(200,200,200,0.7) 0 4px 10px -1px;
+        }
+
+    </style>
 </head>
-<body>
+<body class="loginbody">
 <div class="container">
-    <div class="form row">
+    <h3 class="form-title">LOGIN</h3>
+    <div class="form row loginform">
         <div class="form-horizontal col-md-offset-3" id="login_form">
-            <h3 class="form-title">LOGIN</h3>
             <form id="login" method="post" name="login" action="${pageContext.request.contextPath}/user/login.do" onsubmit="return checkForm()">
                 <div class="col-md-9">
                     <div class="form-group">

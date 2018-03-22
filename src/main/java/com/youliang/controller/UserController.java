@@ -41,7 +41,7 @@ public class UserController {
         ModelAndView mv;
         LoginResult result = userService.login(user.getUserName(), user.getPassWord());
         if(result!= null && result.getLoginCode() == 0) {
-            mv = new ModelAndView("/blog/index");
+            mv = new ModelAndView("/blogs/main");
             user.setId(result.getLoginUser().getId());
             user.setSex(result.getLoginUser().getSex());
             session.setAttribute("currentUser", user);

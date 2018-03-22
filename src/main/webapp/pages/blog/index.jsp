@@ -13,17 +13,60 @@
 <!--[if lt IE 9]>
 <script type="text/javascript" src="${pageContext.request.contextPath}/pages/blog/js/modernizr.js"></script>
 <![endif]-->
-<script type="text/javascript" src="${pageContext.request.contextPath}/pages/blog/js/jquery.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/pages/blog/js/jquery-3.3.1.min.js"></script>
+  <!-- 新 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+  <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+<nav class="navbar navbar-inverse " role="navigation" style=" position: fixed;
+    top:0px; width: -webkit-fill-available; ">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">my blog</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li><a href="#">iOS</a></li>
+        <li><a href="#">SVN</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Java
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">jmeter</a></li>
+            <li><a href="#">EJB</a></li>
+            <li><a href="#">Jasper Report</a></li>
+            <li class="divider"></li>
+            <li><a href="#">分离的链接</a></li>
+            <li class="divider"></li>
+            <li><a href="#">另一个分离的链接</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <p class="navbar-text">当前用户：『${currentUser.userName }』   </p>
+      <a class="navbar-text" href="${pageContext.request.contextPath}/user/logout.do">登出</a>
+    </div>
+    <form class="navbar-form navbar-right" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">提交</button>
+    </form>
+  </div>
+</nav>
+
 <div id="wrapper">
   <header>
     <div class="headtop"></div>
-    <div id="navbar" class="navbar-right">
-      <a class="navbar-brand" href="#">当前用户：『${currentUser.userName }』   </a>
-      <a class="navbar-brand" href="${pageContext.request.contextPath}/user/logout.do">登出</a>
-
-    </div>
     <div class="contenttop">
       <div class="logo f_l">个人博客模板古典系列之――江南墨卷</div>
       <div class="search f_r">
